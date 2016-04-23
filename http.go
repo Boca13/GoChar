@@ -18,13 +18,14 @@ import _ "image/jpeg"
 // Nodo
 type Nodo struct {
 	ip        string
-	idtrabajo int = -1
+	idtrabajo int
 }
 
 func (n *Nodo) AsginarTrabajo(id int, imagen image.Image) bool {
 	if n.idtrabajo == -1 {
 		n.idtrabajo = id
 		// Call RPC
+
 		return true
 	} else {
 		return false
