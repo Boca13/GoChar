@@ -15,17 +15,7 @@ type Nodo struct {
 	resultado byte
 }
 
-/*
-	//Metodos que exporta el servidor.
 
-	//Envia la imagen al nodo en cuestion y le asigna un id de trabajo.
-	func (n* Nodo) AsignarTrabajo (id int, imagen image.Image) bool{}
-
-	func (n* Nodo) AceptaConexiones(){}
-
-	func (n* Nodo) CierraConexiones(){}
-
-*/
 
 type exportaServer struct{
 
@@ -66,32 +56,3 @@ func (s *exportaServer) CierraConexiones(serverAddr string){
 
 
 
-
-func main(){
-
-	d:= gorpc.NewDispatcher() //Dispatcher del servidor RPC
-
-	service := &exportaServer{
-
-	}	
-
-	d.AddService("servicioRPC",service)
-
-
-	addr:= "127.0.0.1:7892" // %%%%%%%% Direccion del servidor RPC %%%%%%%
-	s := gorpc.NewTCPServer(addr,d.NewHandlerFunc()) //Creo el servidor RPC y le paso el Disptacher.
-
-	if err := s.Start(); err != nil {
-        log.Fatalf("Cannot start rpc server: [%s]", err)
-    }
-    defer s.Stop() //Programo la parada del servidor al terminar.
-
-    
-
-
-
-
-
-
-
-}	
