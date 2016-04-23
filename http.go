@@ -20,7 +20,6 @@ import _ "image/jpeg"
 
 // Nodo
 type Nodo struct {
-	//ip        string
 	idtrabajo int
 	cliente   *gorpc.DispatcherClient
 	resultado byte
@@ -107,9 +106,20 @@ func handler_subir(w http.ResponseWriter, r *http.Request) {
 func handler_estado(w http.ResponseWriter, r *http.Request) {
 	identificador, err := strconv.Atoi(r.URL.Query()["id"][0])
 	if err == nil {
-		fmt.Fprintf(w, "%d", identificador)
+		var nodo Nodo
+		for e := nodos.Front(); e != nil; e = e.Next() {
+			nodo = e.Value.(Nodo)
+			if nodo.idtrabajo == identificador {
+				if nodo.resultado == 0 {
+					fmt.Fprint(w, "0")
+				} else {
+					fmt.Fprintf(w, "%c", nodo.resultado)
+
+				}
+			}
+		}
 	} else {
-		fmt.Fprintf(w, "En marcha", r.URL.Path[1:])
+
 	}
 }
 
