@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="estilo.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="parallax.js/parallax.min.js"></script>
+	<script>
+	function scroll(e){
+	$('html, body').animate({
+        	scrollTop: $(e).offset().top
+    	}, 500);
+		return false;
+	}
+	</script>
+    <meta name="theme-color" content="#f89b1c">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#f89b1c">
+    <title>Bocarranco OCR</title>
+</head>
+<body>
+<nav>
+<ul class="nolista">
+<li><a href="">Inicio</a></li>
+<li><a href="#ocr" onclick="return scroll('#ocr');">OCR</a></li>
+<li><a href="#funcionamiento" onclick="return scroll('#funcionamiento');">Funcionamiento</a></li>
+<li><a href="#go" onclick="return scroll('#go');">Lenguaje GO</a></li>
+<li><a href="#probar" onclick="return scroll('#probar');">Probar</a></li>
+</ul>
+</nav>
+<header>
+<h1>Bocarranco Corporation</h1>
+</header>
+<section id="ocr">
+<h2>BocaRanco OCR</h2>
+<article data-parallax="scroll" data-image-src="img/gears.png">
+<div style="float: right; height: 80%; width: 50%; padding: 1em; text-align: center; vertical-align: middle; background: rgba(200,200,200,0.6);">
+<img src="img/text.png" style="border: 4px groove grey; max-width:40%; height: auto; max-height: 100%; display: inline-block;">-&gt;<img src="img/txt.png" style="max-width:40%; height: auto; max-height: 100%; display: inline-block;">
+</div>
+<aside data-parallax="scroll" data-image-src="img/text.png">Esta herramienta analiza imágenes y permite obtener el texto que contienen.</aside>
+<!--  <div style="width: 67%; right: 0; height: 100%;" ></div>-->
+</article>
+</section>
+
+<section id="funcionamiento">
+<article>
+</article>
+</section>
+<section id="go">
+<article>
+<div style="width: 33%;">
+	<img class="animado" style="height: auto; display: inline-block;" src="img/golang.png">
+</div>
+</article>
+</section>
+
+<section id="probar" style="background-color: rgba(20,255,200,0.7);">
+<h2>Probar</h2>
+<article>
+<form action="http://localhost/subir" method="post" enctype="multipart/form-data">
+	<label for="archivo">Selecciona una imagen:</label>
+	<input type="file" name="archivo" id="archivo">
+	<input type="submit" value="Subir" name="enviar">
+</form>
+	
+</article>
+</section>
+
+<footer>
+Bocarranco Inc.
+Todos los derechos reservados
+<ul class="nolista">
+<li><a href="">Más información</a></li>
+<li><a href="">Partnerships</a></li>
+<li><a href="">Trabaja con nosotros</a></li>
+<li><a href="">Política de privacidad</a></li>
+<li><a href="mailto:prodboca@gmail.com">Contacto</a></li>
+</ul>
+<div style="font-size: x-small;">
++34 685 28 51 75
+<br>
+C/ Virgen de Luján 34C 1ºB
+<br>
+Sevilla 41010
+</div>
+</footer>
+</body>
+</html>
