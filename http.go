@@ -194,6 +194,10 @@ func main() {
 	addr := "DIRECCION SERVIDOR RPC"
 	nodos = list.New() //Lista enlazada de objetos nodo
 
+	// Registrar tipo *image.YCbCr para RPC
+	var img *image.YCbCr
+	gorpc.RegisterType(img)
+
 	serverDispatcher := gorpc.NewDispatcher()
 	service := &exportaServer{}
 	serverDispatcher.AddService("goChar", service)
