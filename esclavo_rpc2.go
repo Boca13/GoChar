@@ -43,6 +43,9 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 	log.Printf("Imagen convertida a archivo .bmp correctamente")
 
 	log.Printf("Comenzando deteccion de caracter...")
+
+					//LLAMADA A PYTHON
+
 	/*
 		// Llamar al python
 
@@ -54,7 +57,10 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 			err = cmd.Wait()
 			log.Printf("Resultado: %v", err)
 	*/
-	err = errors.New("127")
+	err = errors.New("97")
+
+
+					//FIN LLAMADA A PYTHON
 	resultado, err := strconv.Atoi(err.Error())
 	if err != nil {
 		log.Fatal(err)
