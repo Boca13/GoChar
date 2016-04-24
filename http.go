@@ -10,9 +10,10 @@ import (
 	//"os"
 	"container/list"
 	"log"
+	"net"
 	"strconv"
 
-	"github.com/valyala/gorpc"
+	"github.com/cenkalti/rpc2"
 )
 
 import _ "image/png"
@@ -21,78 +22,82 @@ import _ "image/jpeg"
 
 // Nodo
 type Nodo struct {
-	idtrabajo   int
-	ip          string
-	cliente     *gorpc.Client
-	clienteDisp *gorpc.DispatcherClient //*?
-	resultado   byte
+	idTrabajo int
+	idNodo    int
+	cliente   *rpc2.Client
+	resultado byte
 }
 
 // Globales
 var cuentaTrabajos int = 0
-
+var cuentaNodos int = 0
 var nodos *list.List
 var indexRobin int = 0
 
-// Servidor RPC
-type exportaServer struct{}
+// Tipos para IO de funciones RPC
+type Args_Conexiones int
+type Reply_Conexiones int
+type Args_RecibeRespuesta struct {
+	Id        int
+	Resultado byte
+}
+type Reply_RecibeRespuesta bool
+type Args_RecibeImagen struct {
+	Imagen *image.YCbCr
+}
 
-//ServerAddr es la direccion del servidor que levanta el esclavo
-func (s *exportaServer) AceptaConexiones(clientAddr string, sinUso int) {
+func AceptaConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_Conexiones) error {
 	//Añado un nuevo nodo a la lista
 	//Creo un cliente apuntando al servidor del nodo
-
-	d := gorpc.NewDispatcher()
-	c := gorpc.NewTCPClient(clientAddr)
-	c.Start() //->Deberia arrancar el cliente? puede que para mas adelante?
-	dc := d.NewServiceClient("servicioRPCEsclavo", c)
-
-	n := Nodo{-1, clientAddr, c, dc, 0} //Creo el nodo y lo inicializo.
-
-	nodos.PushBack(n)
-
+	n := Nodo{-1, cuentaNodos, client, 0} //Creo el nodo y lo inicializo.
+	*reply = Reply_Conexiones(cuentaNodos)
+	nodos.PushBack(&n)
+	log.Println("Conectado cliente con id: ", cuentaNodos)
+	cuentaNodos++
+	return nil
 }
 
-func (s *exportaServer) CierraConexiones(clientAddr string, sinUso int) {
+func CierraConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_Conexiones) error {
 	//Busco nodo en la lista/map y hago un .Remove sobre el.
-	var nodo Nodo
+	var nodo *Nodo
 	for e := nodos.Front(); e != nil; e = e.Next() {
-		nodo = e.Value.(Nodo)
-		if nodo.ip == clientAddr {
-			nodo.cliente.Stop()
+		nodo = e.Value.(*Nodo)
+		if nodo.idNodo == int(*args) {
+			nodo.cliente.Close()
 			nodos.Remove(e)
+			log.Println("Desconectado nodo ", nodo.idNodo)
 		}
 	}
+	return nil
 }
 
-func (s *exportaServer) RecibeRespuesta(clientAddr string, caracter_final byte) {
-
-	//No se que carajo haces con la respuesta y el http handler
-	var nodo Nodo
+func RecibeRespuesta(client *rpc2.Client, args *Args_RecibeRespuesta, reply *Reply_RecibeRespuesta) error {
+	var nodo *Nodo
 	for e := nodos.Front(); e != nil; e = e.Next() {
-		nodo = e.Value.(Nodo)
-		if nodo.ip == clientAddr {
-			nodo.resultado = caracter_final
+		nodo = e.Value.(*Nodo)
+		if nodo.idNodo == args.Id {
+			nodo.resultado = args.Resultado
 		}
 	}
-
+	return nil
 }
 
 // -------------
 // Servidor HTTP
 
 func (n *Nodo) AsignarTrabajo(id int, imagen *image.YCbCr) bool {
-	if n.idtrabajo == -1 {
+	if n.idTrabajo == -1 {
 		// Call RPC
-		res, err := n.clienteDisp.Call("RecibeImagen", imagen)
-		fmt.Print(res)
-		if err != nil {
-			n.idtrabajo = cuentaTrabajos
-			n.resultado = 0
-			//i := imagen.(image.YCbCr)
-			fmt.Print(imagen)
+		var res Reply_RecibeRespuesta
+		log.Println("Enviando imagen al nodo por RPC...")
+		err := n.cliente.Call("RecibeImagen", Args_RecibeImagen{imagen}, &res)
+		log.Println("Respuesta: ", res)
+		if err == nil {
+			n.idTrabajo = cuentaTrabajos
+			log.Println("Asignando id de trabajo ", n.idTrabajo)
 			return true
 		} else {
+			log.Println("Error al pasar la imagen a esclavo", err)
 			return false
 		}
 	} else {
@@ -103,9 +108,13 @@ func (n *Nodo) AsignarTrabajo(id int, imagen *image.YCbCr) bool {
 func handler_subir(w http.ResponseWriter, r *http.Request) {
 	// Recibir archivo
 	cuentaTrabajos++
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
 
 	reader, err := r.MultipartReader()
-
+	log.Println("Recibiendo archivo...")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintln(w, "Error en la consulta:")
@@ -120,18 +129,17 @@ func handler_subir(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, err)
 		return
 	}
-
+	log.Println("Decodificando imagen...")
 	imagen, _, err := image.Decode(parte)
 	img := imagen.(*image.YCbCr)
-	otraimg := image.Image(img)
-	fmt.Print(otraimg)
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(w, "Error del servidor:")
 		fmt.Fprintln(w, err)
 		return
 	}
-
+	log.Println("Imagen decodificada.")
 	// Pasarle la image a otro método
 	// Decidir a quien. Round-robin
 	e := nodos.Front()
@@ -143,10 +151,13 @@ func handler_subir(w http.ResponseWriter, r *http.Request) {
 		indexRobin = 0
 		return
 	}
-	var nodo Nodo = e.Value.(Nodo)
+	var nodo *Nodo = e.Value.(*Nodo)
 
-	nodo.idtrabajo = -1
+	log.Println("Trabajo asignado al nodo ", nodo.idNodo)
+
+	//nodo.idTrabajo = -1
 	if nodo.AsignarTrabajo(cuentaTrabajos, img) == true {
+		log.Println("Trabajo número ", cuentaTrabajos, " está asignado al nodo", nodo.idNodo)
 		indexRobin++
 		fmt.Fprint(w, cuentaTrabajos)
 	} else {
@@ -156,16 +167,21 @@ func handler_subir(w http.ResponseWriter, r *http.Request) {
 
 func handler_estado(w http.ResponseWriter, r *http.Request) {
 	identificador, err := strconv.Atoi(r.URL.Query()["id"][0])
+	log.Println("Petición de estado del trabajo ", identificador)
 	if err == nil {
-		var nodo Nodo
+		var nodo *Nodo
 		for e := nodos.Front(); e != nil; e = e.Next() {
-			nodo = e.Value.(Nodo)
-			if nodo.idtrabajo == identificador {
+			nodo = e.Value.(*Nodo)
+			if nodo.idTrabajo == identificador {
+				log.Println(" Trabajo encargado al nodo ", nodo.idNodo)
 				if nodo.resultado == 0 {
+					log.Println("  -> El trabajo no se ha terminado")
 					fmt.Fprint(w, "0")
 				} else {
+					log.Println("  -> El nodo ha devuelto el valor ", nodo.resultado)
 					fmt.Fprintf(w, "%c", nodo.resultado)
-
+					nodo.idTrabajo = -1
+					nodo.resultado = 0
 				}
 			}
 		}
@@ -191,25 +207,21 @@ func main() {
 	*	- Estadísticas: /estadisticas
 	 */
 
-	addr := "DIRECCION SERVIDOR RPC"
 	nodos = list.New() //Lista enlazada de objetos nodo
 
-	// Registrar tipo *image.YCbCr para RPC
-	var img *image.YCbCr
-	gorpc.RegisterType(img)
+	server := rpc2.NewServer()
+	server.Handle("AceptaConexiones", AceptaConexiones)
+	server.Handle("CierraConexiones", CierraConexiones)
+	server.Handle("RecibeRespuesta", RecibeRespuesta)
 
-	serverDispatcher := gorpc.NewDispatcher()
-	service := &exportaServer{}
-	serverDispatcher.AddService("goChar", service)
-	rpcServer := gorpc.NewTCPServer(addr, serverDispatcher.NewHandlerFunc())
-
-	if err := rpcServer.Start(); err != nil {
+	listener, err := net.Listen("tcp", "0.0.0.0:12345")
+	go server.Accept(listener)
+	if err != nil {
 		log.Fatalf("No puedo arrancar el servidor: [%s]", err)
 	}
-	defer rpcServer.Stop()
+	// Servidor RPC arrancado en este punto
 
-	//Servidor RPC arrancado en este punto
-
+	// Ahora servidor HTTP
 	http.HandleFunc("/subir", handler_subir)
 	http.HandleFunc("/estado", handler_estado)
 	http.HandleFunc("/estadisticas", handler_estadisticas)

@@ -56,12 +56,30 @@
 <section id="probar" style="background-color: rgba(20,255,200,0.7);">
 <h2>Probar</h2>
 <article>
-<form action="http://localhost/subir" method="post" enctype="multipart/form-data">
+<div id="resultado"></div>
+<form id="archivo" action="http://localhost/subir" method="post" enctype="multipart/form-data">
 	<label for="archivo">Selecciona una imagen:</label>
 	<input type="file" name="archivo" id="archivo">
 	<input type="submit" value="Subir" name="enviar">
 </form>
-	
+<form id="archivo2" action="http://localhost/subir" method="post" enctype="multipart/form-data">
+	<label for="archivo">Selecciona una imagen:</label>
+	<input type="file" name="archivo" id="archivo">
+	<input type="submit" value="Subir" name="enviar">
+</form>
+<script>
+$( '#archivo' )
+  .submit( function( e ) {
+    $('#resultado').html($.ajax( {
+      url: 'http://localhost/subir',
+      type: 'POST',
+      data: new FormData( this ),
+      processData: false,
+      contentType: false
+    } ));
+    e.preventDefault();
+  } );
+  </script>
 </article>
 </section>
 
