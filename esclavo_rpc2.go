@@ -8,11 +8,11 @@ import (
 	"net"
 	"os"
 	//"os/exec"
+	"image/png"
 	"os/signal"
 	"strconv"
 
 	"github.com/cenkalti/rpc2"
-	"golang.org/x/image/bmp"
 )
 
 //Globales
@@ -34,11 +34,11 @@ type Args_RecibeRespuesta struct {
 func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_RecibeImagen) error {
 	log.Printf("Me ha llegado una imagen.")
 
-	writer, err := os.Create("char.bmp")
+	writer, err := os.Create("char.png")
 	if err != nil {
 		log.Fatal(err)
 	}
-	bmp.Encode(writer, args.Imagen)
+	png.Encode(writer, args.Imagen)
 	writer.Close()
 	log.Printf("Imagen convertida a archivo .bmp correctamente")
 
