@@ -44,7 +44,7 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 
 	log.Printf("Comenzando deteccion de caracter...")
 
-					//LLAMADA A PYTHON
+	//LLAMADA A PYTHON
 
 	/*
 		// Llamar al python
@@ -59,8 +59,7 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 	*/
 	err = errors.New("97")
 
-
-					//FIN LLAMADA A PYTHON
+	//FIN LLAMADA A PYTHON
 	resultado, err := strconv.Atoi(err.Error())
 	if err != nil {
 		log.Fatal(err)
@@ -82,21 +81,6 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 }
 
 func main() {
-
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	go func() {
-		for sig := range c {
-			log.Printf("captured %v, stopping profiler and exiting..", sig)
-			err := clt.Call("CierraConexiones", identificador_nodo, identificador_nodo)
-			log.Printf("Mi id_nodo antes de salir es: %d", identificador_nodo)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			os.Exit(1)
-		}
-	}()
 
 	//Funcion que recibe las imagenes.
 	log.Print("Esclavo de goRpc iniciado.")
@@ -121,5 +105,16 @@ func main() {
 	signal.Notify(cc, os.Interrupt)
 
 	fmt.Scanln()
+
+	log.Printf("Cerrando programa, desconexion del servidor....")
+	//Comprobar esta llamada.
+	err = clt.Call("CierraConexiones", identificador_nodo, identificador_nodo)
+
+	log.Printf("Desconctado del servidor correctamente.")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	os.Exit(1)
 
 }
