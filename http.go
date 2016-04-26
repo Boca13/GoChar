@@ -162,9 +162,9 @@ func handler_subir(w http.ResponseWriter, r *http.Request) {
 	// Pasarle la image a otro método
 	// Decidir a quien. Round-robin
 	e := nodos.Front()
-	for i := 0; (e != nil) && (i < indexRobin); e = e.Next() {
+	for i := 0; (e != nil) && (i < indexRobin) && (e.Value.(*Nodo).idTrabajo != -1); e = e.Next() {
 	}
-	if e == nil {
+	if (e == nil) || (e.Value.(*Nodo).idTrabajo != -1) {
 		w.WriteHeader(http.StatusServiceUnavailable)
 		fmt.Fprintln(w, "Todos los nodos están ocupados")
 		indexRobin = 0

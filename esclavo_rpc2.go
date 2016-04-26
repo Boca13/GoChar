@@ -10,7 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
-	"strconv"
+	//"strconv"
 
 	"github.com/cenkalti/rpc2"
 )
@@ -52,7 +52,7 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 	resultado, err := cmd.Output()
 	
 	
-	log.Printf("Resultado: %s", out)
+	log.Printf("Resultado: %s", resultado)
 	//err = errors.New("97")
 
 	//FIN LLAMADA A PYTHON
@@ -66,7 +66,7 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 	log.Printf("Deteccion de caracter finalizada. Enviando respuesta...")
 	//_, err = dc.Call("RecibeRespuesta", resultado) //Envio el caracter con el resultado al maestro.
 
-	var final = Args_RecibeRespuesta{identificador_nodo, byte(resultado)}
+	var final = Args_RecibeRespuesta{identificador_nodo, byte(resultado[0])}
 
 	err = clt.Call("RecibeRespuesta", &final, nil)
 	if err != nil {
