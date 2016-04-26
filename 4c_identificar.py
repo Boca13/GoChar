@@ -22,7 +22,7 @@ import numpy as np
 def load_letter():
 	dataset = np.ndarray(shape=(1, image_size, image_size), dtype=np.float32)
 	image_index = 0
-	image_file = "letra.png"
+	image_file = "char.png"
 	try:
 		image_data = (ndimage.imread(image_file).astype(float) - pixel_depth / 2) / pixel_depth
 		if image_data.shape != (image_size, image_size):
@@ -103,7 +103,7 @@ num_steps = 1001
 with tf.Session(graph=graph) as session:
   tf.initialize_all_variables().run()
   resultado = np.array(problem_prediction.eval())
-  print('Con probabilidad %f%% la letra es una: ' % resultado.max())
-  sys.exit(letras[resultado.argmax()])
-
+  #print('Con probabilidad %f%% la letra es una: ' % resultado.max())
+  print(letras[resultado.argmax()])
+	
 #tf.nn.max_pool([batch, height, width, channels], [4,4,4,4], [3,3,3,3], 'VALID', data_format='NHWC', name=None)
