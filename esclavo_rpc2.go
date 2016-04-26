@@ -48,7 +48,7 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 
 		// Llamar al python
 
-			cmd := exec.Command("python", "reconocer.py", "char.png")
+			cmd := exec.Command("python", "4c_identificar.py", "char.png")
 			err = cmd.Start()
 			if err != nil {
 				log.Fatal(err)
@@ -90,9 +90,8 @@ func main() {
 	log.Printf("Conectado correctamente a servidorRPC.")
 	//Cuando ejecuto el cliente, llamo al servidor por aqui.
 
-	var conexion Args_Conexiones = 3
 	go clt.Run()                                                       //Se crea en otro hilo
-	err := clt.Call("AceptaConexiones", conexion, &identificador_nodo) //Me registro en servidor.
+	err := clt.Call("AceptaConexiones", nil, &identificador_nodo) //Me registro en servidor.
 	if err != nil {
 		log.Fatal(err)
 	}
