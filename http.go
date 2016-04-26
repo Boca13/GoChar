@@ -4,10 +4,7 @@ package main
 import (
 	"fmt"
 	"image"
-	//"io"
-	//"mime/multipart"
 	"net/http"
-	//"os"
 	"container/list"
 	"image/color"
 	"log"
@@ -40,6 +37,7 @@ var indexRobin int = 0
 // Tipos para IO de funciones RPC
 type Args_Conexiones int
 type Reply_Conexiones int
+type Reply_CierraConex bool
 type Args_RecibeRespuesta struct {
 	Id        int
 	Resultado byte
@@ -60,7 +58,7 @@ func AceptaConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_C
 	return nil
 }
 
-func CierraConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_Conexiones) error {
+func CierraConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_CierraConex) error {
 	//Busco nodo en la lista/map y hago un .Remove sobre el.
 	var nodo *Nodo
 	for e := nodos.Front(); e != nil; e = e.Next() {
@@ -68,6 +66,7 @@ func CierraConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_C
 		if nodo.idNodo == int(*args) {
 			nodo.cliente.Close()
 			nodos.Remove(e)
+			*reply = true
 			log.Println("Desconectado nodo ", nodo.idNodo)
 		}
 	}

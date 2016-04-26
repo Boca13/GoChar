@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"errors"
 	"fmt"
 	"image"
 	"image/png"
@@ -10,7 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
-	//"strconv"
+	
 
 	"github.com/cenkalti/rpc2"
 )
@@ -25,6 +24,7 @@ type Args_RecibeImagen struct {
 }
 type Args_Conexiones int
 type Reply_RecibeImagen bool
+type Reply_CierraConex bool
 
 type Args_RecibeRespuesta struct {
 	Id        int
@@ -78,6 +78,8 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 }
 
 func main() {
+	var conexiones Args_Conexiones = 1 //Bandera que envio al servidor
+	var respFinal Reply_CierraConex 
 
 	//Funcion que recibe las imagenes.
 	log.Print("Esclavo de goRpc iniciado.")
@@ -89,7 +91,6 @@ func main() {
 	log.Printf("Conectado correctamente a servidorRPC.")
 	//Cuando ejecuto el cliente, llamo al servidor por aqui.
 
-	var conexiones Args_Conexiones = 3
 	go clt.Run()                                                         //Se crea en otro hilo
 	err := clt.Call("AceptaConexiones", conexiones, &identificador_nodo) //Me registro en servidor.
 	if err != nil {
@@ -105,9 +106,15 @@ func main() {
 
 	log.Printf("Cerrando programa, desconexion del servidor....")
 	//Comprobar esta llamada.
-	err = clt.Call("CierraConexiones", identificador_nodo, identificador_nodo)
+	err = clt.Call("CierraConexiones", identificador_nodo, respFinal)
 
-	log.Printf("Desconctado del servidor correctamente.")
+	if respFinal == true{
+		log.Printf("Desconctado del servidor correctamente.")
+	}else{
+		log.Printf("Problemas en la desconexion con el servidorRPC")
+	}
+
+
 	if err != nil {
 		log.Fatal(err)
 	}
