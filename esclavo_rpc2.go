@@ -4,11 +4,11 @@ import (
 	//"errors"
 	"fmt"
 	"image"
+	"image/png"
 	"log"
 	"net"
 	"os"
 	"os/exec"
-	"image/png"
 	"os/signal"
 	"strconv"
 
@@ -21,7 +21,7 @@ var clt *rpc2.Client
 var identificador_nodo int
 
 type Args_RecibeImagen struct {
-	Imagen *image.RGBA
+	Imagen *image.Gray
 }
 type Args_Conexiones int
 type Reply_RecibeImagen bool
@@ -46,15 +46,15 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 
 	//LLAMADA A PYTHON
 
-		// Llamar al python
+	// Llamar al python
 
-			cmd := exec.Command("python", "4c_identificar.py", "char.png")
-			err = cmd.Start()
-			if err != nil {
-				log.Fatal(err)
-			}
-			err = cmd.Wait()
-			log.Printf("Resultado: %v", err)
+	cmd := exec.Command("python", "4c_identificar.py", "char.png")
+	err = cmd.Start()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = cmd.Wait()
+	log.Printf("Resultado: %v", err)
 	//err = errors.New("97")
 
 	//FIN LLAMADA A PYTHON
@@ -91,7 +91,7 @@ func main() {
 	//Cuando ejecuto el cliente, llamo al servidor por aqui.
 
 	var conexiones Args_Conexiones = 3
-	go clt.Run()                                                       //Se crea en otro hilo
+	go clt.Run()                                                         //Se crea en otro hilo
 	err := clt.Call("AceptaConexiones", conexiones, &identificador_nodo) //Me registro en servidor.
 	if err != nil {
 		log.Fatal(err)

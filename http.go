@@ -9,7 +9,9 @@ import (
 	"net/http"
 	//"os"
 	"container/list"
+	"image/color"
 	"log"
+	"math"
 	"net"
 	"strconv"
 
@@ -44,7 +46,7 @@ type Args_RecibeRespuesta struct {
 }
 type Reply_RecibeRespuesta bool
 type Args_RecibeImagen struct {
-	Imagen *image.RGBA
+	Imagen *image.Gray
 }
 
 func AceptaConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_Conexiones) error {
@@ -86,7 +88,7 @@ func RecibeRespuesta(client *rpc2.Client, args *Args_RecibeRespuesta, reply *Rep
 // -------------
 // Servidor HTTP
 
-func (n *Nodo) AsignarTrabajo(id int, imagen *image.RGBA) bool {
+func (n *Nodo) AsignarTrabajo(id int, imagen *image.Gray) bool {
 	if n.idTrabajo == -1 {
 		// Call RPC
 		var res Reply_RecibeRespuesta
@@ -131,9 +133,24 @@ func handler_subir(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println("Decodificando imagen...")
-	imagen, _, err := image.Decode(parte)
-	imagen = resize.Resize(28, 28, imagen, resize.Bilinear)
-	img := imagen.(*image.RGBA)
+	img, _, err := image.Decode(parte)
+	// Redimensionar
+	img = resize.Resize(28, 28, img, resize.Bicubic)
+
+	// Create a new grayscale image
+	bounds := img.Bounds()
+	width, height := bounds.Max.X, bounds.Max.Y
+	gray := image.NewGray(image.Rectangle{image.Point{0, 0}, image.Point{width, height}})
+	for x := 0; x < width; x++ {
+		for y := 0; y < height; y++ {
+			oldColor := img.At(x, y)
+			r, g, b, _ := oldColor.RGBA()
+			avg := 0.2125*float64(r) + 0.7154*float64(g) + 0.0721*float64(b)
+			grayColor := color.Gray{uint8(math.Ceil(avg))}
+			gray.Set(x, y, grayColor)
+		}
+	}
+	// ------
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -158,7 +175,7 @@ func handler_subir(w http.ResponseWriter, r *http.Request) {
 	log.Println("Trabajo asignado al nodo ", nodo.idNodo)
 
 	//nodo.idTrabajo = -1
-	if nodo.AsignarTrabajo(cuentaTrabajos, img) == true {
+	if nodo.AsignarTrabajo(cuentaTrabajos, gray) == true {
 		log.Println("Trabajo número ", cuentaTrabajos, " está asignado al nodo", nodo.idNodo)
 		indexRobin++
 		fmt.Fprint(w, cuentaTrabajos)
