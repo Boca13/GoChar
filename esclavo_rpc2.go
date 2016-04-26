@@ -1,7 +1,7 @@
 package main
 
 import (
-	"errors"
+	//"errors"
 	"fmt"
 	"image"
 	"log"
@@ -90,8 +90,9 @@ func main() {
 	log.Printf("Conectado correctamente a servidorRPC.")
 	//Cuando ejecuto el cliente, llamo al servidor por aqui.
 
+	var conexiones Args_Conexiones = 3
 	go clt.Run()                                                       //Se crea en otro hilo
-	err := clt.Call("AceptaConexiones", nil, &identificador_nodo) //Me registro en servidor.
+	err := clt.Call("AceptaConexiones", conexiones, &identificador_nodo) //Me registro en servidor.
 	if err != nil {
 		log.Fatal(err)
 	}
