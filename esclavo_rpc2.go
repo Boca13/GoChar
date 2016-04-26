@@ -7,7 +7,7 @@ import (
 	"log"
 	"net"
 	"os"
-	//"os/exec"
+	"os/exec"
 	"image/png"
 	"os/signal"
 	"strconv"
@@ -40,24 +40,22 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 	}
 	png.Encode(writer, args.Imagen)
 	writer.Close()
-	log.Printf("Imagen convertida a archivo .bmp correctamente")
+	log.Printf("Imagen convertida a archivo .png correctamente")
 
 	log.Printf("Comenzando deteccion de caracter...")
 
 	//LLAMADA A PYTHON
 
-	/*
 		// Llamar al python
 
-			cmd := exec.Command("python", "reconocer.py", "char.bmp")
+			cmd := exec.Command("python", "reconocer.py", "char.png")
 			err = cmd.Start()
 			if err != nil {
 				log.Fatal(err)
 			}
 			err = cmd.Wait()
 			log.Printf("Resultado: %v", err)
-	*/
-	err = errors.New("97")
+	//err = errors.New("97")
 
 	//FIN LLAMADA A PYTHON
 	resultado, err := strconv.Atoi(err.Error())
