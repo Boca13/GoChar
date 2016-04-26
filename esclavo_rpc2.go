@@ -16,12 +16,12 @@ import (
 )
 
 //Globales
-var conn, _ = net.Dial("tcp", "192.168.1.10:12345")
+var conn, _ = net.Dial("tcp", "150.214.182.97:12345")
 var clt *rpc2.Client
 var identificador_nodo int
 
 type Args_RecibeImagen struct {
-	Imagen *image.YCbCr
+	Imagen *image.RGBA
 }
 type Args_Conexiones int
 type Reply_RecibeImagen bool

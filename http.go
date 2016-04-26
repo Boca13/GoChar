@@ -14,6 +14,7 @@ import (
 	"strconv"
 
 	"github.com/cenkalti/rpc2"
+	"github.com/nfnt/resize"
 )
 
 import _ "image/png"
@@ -43,7 +44,7 @@ type Args_RecibeRespuesta struct {
 }
 type Reply_RecibeRespuesta bool
 type Args_RecibeImagen struct {
-	Imagen *image.YCbCr
+	Imagen *image.RGBA
 }
 
 func AceptaConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_Conexiones) error {
@@ -85,7 +86,7 @@ func RecibeRespuesta(client *rpc2.Client, args *Args_RecibeRespuesta, reply *Rep
 // -------------
 // Servidor HTTP
 
-func (n *Nodo) AsignarTrabajo(id int, imagen *image.YCbCr) bool {
+func (n *Nodo) AsignarTrabajo(id int, imagen *image.RGBA) bool {
 	if n.idTrabajo == -1 {
 		// Call RPC
 		var res Reply_RecibeRespuesta
@@ -131,7 +132,8 @@ func handler_subir(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("Decodificando imagen...")
 	imagen, _, err := image.Decode(parte)
-	img := imagen.(*image.YCbCr)
+	imagen = resize.Resize(28, 28, imagen, resize.Bilinear)
+	img := imagen.(*image.RGBA)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
