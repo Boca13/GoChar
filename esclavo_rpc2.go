@@ -49,17 +49,16 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 	// Llamar al python
 
 	cmd := exec.Command("python", "4c_identificar.py", "char.png")
-	err = cmd.Start()
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = cmd.Wait()
-	log.Printf("Resultado: %v", err)
+	resultado, err := cmd.Output()
+	
+	
+	log.Printf("Resultado: %s", out)
 	//err = errors.New("97")
 
 	//FIN LLAMADA A PYTHON
-	resultado, err := strconv.Atoi(err.Error())
+	
 	if err != nil {
+		log.Printf("El error que suelta python es  != de nil")
 		log.Fatal(err)
 	}
 	*reply = true
