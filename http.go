@@ -37,7 +37,7 @@ var indexRobin int = 0
 // Tipos para IO de funciones RPC
 type Args_Conexiones int
 type Reply_Conexiones int
-type Reply_CierraConex bool
+
 type Args_RecibeRespuesta struct {
 	Id        int
 	Resultado byte
@@ -58,16 +58,17 @@ func AceptaConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_C
 	return nil
 }
 
-func CierraConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_CierraConex) error {
+func CierraConexiones(client *rpc2.Client, args *Args_Conexiones, reply *Reply_Conexiones) error {
 	//Busco nodo en la lista/map y hago un .Remove sobre el.
 	var nodo *Nodo
 	for e := nodos.Front(); e != nil; e = e.Next() {
 		nodo = e.Value.(*Nodo)
 		if nodo.idNodo == int(*args) {
-			nodo.cliente.Close()
-			nodos.Remove(e)
-			*reply = true
+			*reply = -2
+			//nodo.cliente.Close()
+			nodos.Remove(e)			
 			log.Println("Desconectado nodo ", nodo.idNodo)
+			
 		}
 	}
 	return nil

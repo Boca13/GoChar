@@ -15,16 +15,17 @@ import (
 )
 
 //Globales
-var conn, _ = net.Dial("tcp", "150.214.182.97:12345")
+var conn, _ = net.Dial("tcp", "127.0.0.1:12345")
 var clt *rpc2.Client
 var identificador_nodo int
+var identif_desconex int
 
 type Args_RecibeImagen struct {
 	Imagen *image.Gray
 }
 type Args_Conexiones int
 type Reply_RecibeImagen bool
-type Reply_CierraConex bool
+
 
 type Args_RecibeRespuesta struct {
 	Id        int
@@ -79,7 +80,7 @@ func RecibeImagen(client *rpc2.Client, args *Args_RecibeImagen, reply *Reply_Rec
 
 func main() {
 	var conexiones Args_Conexiones = 1 //Bandera que envio al servidor
-	var respFinal Reply_CierraConex 
+	
 
 	//Funcion que recibe las imagenes.
 	log.Print("Esclavo de goRpc iniciado.")
@@ -93,6 +94,7 @@ func main() {
 
 	go clt.Run()                                                         //Se crea en otro hilo
 	err := clt.Call("AceptaConexiones", conexiones, &identificador_nodo) //Me registro en servidor.
+		//fmt.Println("Identificador nodo (conexion): ", identificador_nodo) DEBUG
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -106,19 +108,18 @@ func main() {
 
 	log.Printf("Cerrando programa, desconexion del servidor....")
 	//Comprobar esta llamada.
-	err = clt.Call("CierraConexiones", identificador_nodo, respFinal)
-
-	if respFinal == true{
-		log.Printf("Desconctado del servidor correctamente.")
-	}else{
-		log.Printf("Problemas en la desconexion con el servidorRPC")
+	err = clt.Call("CierraConexiones", identificador_nodo, &identif_desconex)
+		//fmt.Println("Identificador nodo(desconexion): ",identif_desconex) DEBUG
+	
+	if identif_desconex == -2{
+		fmt.Println("Desconexion correcta del servidor.")
+		clt.Close()
 	}
-
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	os.Exit(1)
+	os.Exit(0)
 
 }
