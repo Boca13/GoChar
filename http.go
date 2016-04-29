@@ -185,6 +185,10 @@ func handler_subir(w http.ResponseWriter, r *http.Request) {
 }
 
 func handler_estado(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	identificador, err := strconv.Atoi(r.URL.Query()["id"][0])
 	log.Println("Petición de estado del trabajo ", identificador)
 	if err == nil {
@@ -209,22 +213,11 @@ func handler_estado(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handler_estadisticas(w http.ResponseWriter, r *http.Request) {
-	identificador, err := strconv.Atoi(r.URL.Query()["id"][0])
-	if err == nil {
-		fmt.Fprintf(w, "%d", identificador)
-	} else {
-		fmt.Fprintf(w, "En marcha", r.URL.Path[1:])
-	}
-
-}
-
 func main() {
 	/*	URLs:
 	*	- Pedir foto: /subir
 	*	- Preguntar por foto: /estado
-	*	- Estadísticas: /estadisticas
-	 */
+	*/
 
 	nodos = list.New() //Lista enlazada de objetos nodo
 
@@ -243,6 +236,5 @@ func main() {
 	// Ahora servidor HTTP
 	http.HandleFunc("/subir", handler_subir)
 	http.HandleFunc("/estado", handler_estado)
-	http.HandleFunc("/estadisticas", handler_estadisticas)
 	http.ListenAndServe(":80", nil)
 }
