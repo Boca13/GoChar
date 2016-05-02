@@ -73,10 +73,31 @@ form{
 	padding: 1.5em;
 	border: 2px groove aqua;
     display: inline-block;
+	text-align: center;
+	vertical-align: top;
 }
 input{
 	display: block;
 	margin: 1em;
+}
+#resultado{
+	display: inline-block;
+	border: groove 5px aquamarine;
+	background: rgba(100,255,255,0.6);
+	min-height: 8em;
+	min-width: 12em;
+	text-align: center;
+	vertical-align: top;
+}
+#resultado>h4{
+	color: red;
+}
+#resultado>h1{
+	color: green;
+	font-size: x-large;
+}
+#probar>article{
+	text-align: center;
 }
 footer{
 	text-align: center;
@@ -107,15 +128,15 @@ footer{
 	clear: both;
     margin-right: -5px;
 }
-#herramientas{
+#herramientas>article{
 	text-align: center;
-	vertical-align: top;
 }
 .cinco {
 	min-width: 100px;
 	width: 19%;
 	display: inline-block;
 	text-align: center;
+	vertical-align: top;
 }
 .cinco>h4>a{
 	text-decoration: none;
@@ -127,6 +148,7 @@ footer{
 	max-height: 100%;
 	position: relative;
 }
+
 #ocr>article {
 	background: rgba(0,125,200,0.5);
 }
