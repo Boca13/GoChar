@@ -12,47 +12,120 @@
     	}, 500);
 		return false;
 	}
+	$(window).ready(function(){
+		$("#anav").click(function(){return scroll('#top');});
+		$("#aintro").click(function(){return scroll('#intro');});
+		$("#ago").click(function(){return scroll('#go');});
+		$("#aocr").click(function(){return scroll('#ocr');});
+		$("#aestructura").click(function(){return scroll('#estructura');});
+		$("#aherramientas").click(function(){return scroll('#herramientas');});
+		$("#aprobar").click(function(){return scroll('#probar');});
+		
+		//$(".top")..click(function(){return scroll('#nav');});
+		$(".top").each(function(i){$(this).click(function(){return scroll('#top');});});
+
+		$("#intro>.next").click(function(){return scroll('#go');});
+		$("#go>.next").click(function(){return scroll('#ocr');});
+		$("#ocr>.next").click(function(){return scroll('#estructura');});
+		$("#estructura>.next").click(function(){return scroll('#herramientas');});
+		$("#herramientas>.next").click(function(){return scroll('#probar');});
+	});
 	</script>
     <meta name="theme-color" content="#f89b1c">
     <meta name="apple-mobile-web-app-status-bar-style" content="#f89b1c">
     <title>Bocarranco OCR</title>
 </head>
-<body>
+<body id="top">
 <nav>
 <ul class="nolista">
-<li><a href="">Inicio</a></li>
-<li><a href="#ocr" onclick="return scroll('#ocr');">OCR</a></li>
-<li><a href="#funcionamiento" onclick="return scroll('#funcionamiento');">Funcionamiento</a></li>
-<li><a href="#go" onclick="return scroll('#go');">Lenguaje GO</a></li>
-<li><a href="#probar" onclick="return scroll('#probar');">Probar</a></li>
+<li><a id="anav" href="#top" onclick="return scroll('#top');">Inicio</a></li>
+<li><a id="aintro" href="#intro" onclick="return scroll('#intro');">GoChar</a></li>
+<li><a id="ago" href="#go" onclick="return scroll('#go');">Lenguaje Go</a></li>
+<li><a id="aocr" href="#ocr" onclick="return scroll('#ocr');">Reconocimiento de caracteres</a></li>
+<li><a id="aestructura" href="#estructura" onclick="return scroll('#estructura');">Estructura</a></li>
+<li><a id="aherramientas" href="#herramientas" onclick="return scroll('#herramientas');">Herramientas</a></li>
+<li><a id="aprobar" href="#probar" onclick="return scroll('#probar');">Probar</a></li>
 </ul>
 </nav>
 <header>
 <h1>Bocarranco Corporation</h1>
 </header>
-<section id="ocr">
-<h2>BocaRanco OCR</h2>
+<section id="intro">
+<h2>GoChar</h2>
 <article data-parallax="scroll" data-image-src="img/gears.png">
+<p>goChar es un proyecto de código libre basado en el reconocimiento de caracteres óptico distribuido, mediante el
+uso de las llamadas a procedimientos remotos(RPC). Está creado a partir del lenguaje de programación Go, Python y la librería open-source TensorFlow.</p>
+
+<p>El reconocimiento de caracteres óptico es un proceso dirigido a la digitaliación de textos, los cuales se identifican
+a partir de una imagen de simbolos o caracteres que pertenecen a un determinado alfabeto.</p>
+
+<p>Muchos lientes desde distintas plataformas pueden acceder a este sistema y subir una imagen para digitalizar una imagen.</p>
 <div style="float: right; height: 80%; width: 50%; padding: 1em; text-align: center; vertical-align: middle; background: rgba(200,200,200,0.6);">
-<img src="img/text.png" style="border: 4px groove grey; max-width:40%; height: auto; max-height: 100%; display: inline-block;">-&gt;<img src="img/txt.png" style="max-width:40%; height: auto; max-height: 100%; display: inline-block;">
+<img src="img/text.png" style="border: 4px groove grey; max-width:40%; height: auto; max-height: 100%; display: inline-block;">→<img src="img/txt.png" style="max-width:40%; height: auto; max-height: 100%; display: inline-block;">
 </div>
 <aside data-parallax="scroll" data-image-src="img/text.png">Esta herramienta analiza imágenes y permite obtener el texto que contienen.</aside>
-<!--  <div style="width: 67%; right: 0; height: 100%;" ></div>-->
+
 </article>
+<div class="top">↑</div>
+<div class="next">→</div>
 </section>
 
-<section id="funcionamiento">
-<article>
-</article>
-</section>
 <section id="go">
 <article>
-<div style="width: 33%;">
-	<img class="animado" style="width: 300px; height: auto; display: inline-block;" src="img/golang.png">
-</div>
+<p>Go es un lenguaje de programación inspirado en la sintaxis de C. 
+Nacio en 2009 creado por Google, algunos de sus creadores son los padres de Unix, UTF-9 y V8-Javascript Engine.
+Caracteristicas:</p>
+<ul>
+	<li>Compilado</li>
+	<li>Estaticamente tipado</li>
+	<li>Concurrente</li>
+	<li>Uso atípico de Programacion O. O. - Go no usa clases, no usa herencia y el uso de interfaces se realiza de manera implicita.</li>
+	<li>Todo esto pensado para mejorar el rendimiento al momento de diseñar el software.</li>
+</ul>
+<p>Go está basado en paquetes, realizados por una amplia comunidad de desarrolladores de todo el mundo.
+Para este proyecto hemos utiliado el paquete RPC2 de golang, desarrollado por cenk.
+Este paquete es un fork de la paquete de golang net/rpc, pero el cual añade comunicación bidireccional, esto
+significa que el servidor puede llamar a los metodos del cliente.</p>
 </article>
+<div class="top">↑</div>
+<div class="next">→</div>
 </section>
+<section id="ocr">
+<article>
+<p>
+Cada nodo ejecuta un script en Python para el reconocimiento de los caracteres.
+Este programa toma una imagen en 28x28 en escala de grises, la salida de este es el carácter que ha obtenido.
 
+El reconocimiento de caracteres está basado en un conjunto de redes neuronales y convolucionales. Tras seguir
+por estas capas, se somete a la imagen a una regresión logistica para determinar el caracter del que se trata.
+
+El script te Python trabaja con TensorFlow, creado por Google. Es una librería de código libre para el aprendizaje
+de máquinas.
+</p>
+</article>
+<div class="top">↑</div>
+<div class="next">→</div>
+</section>
+<section id="estructura">
+<article>
+<div class="tres"></div>
+<div class="tres"></div>
+<div class="tres"></div>
+</article>
+<div class="top">↑</div>
+<div class="next">→</div>
+</section>
+<section id="herramientas">
+<article>
+<div class="cinco"><h4><a href="https://github.com/visualfc/liteide">Liteide</a></h4><img src="img/liteide.png"></div>
+<div class="cinco"><h4><a href="https://github.com/Boca13/GoChar">Github</a></h4><img src="img/github.png"></div>
+<div class="cinco"><h4><a href="https://waffle.io/Boca13/GoChar">Waffle.io</a></h4><img src="img/waffle.png"></div>
+<div class="cinco"><h4>Dropbox</h4><img src="img/dropbox.png"></div>
+<div class="cinco"><h4>Whatsapp</h4><img src="img/whatsapp.png"></div>
+</article>
+<div class="top">↑</div>
+<div class="next">→</div>
+</section>
 <section id="probar" style="background-color: rgba(20,255,200,0.7);">
 <h2>Probar</h2>
 <article>
@@ -81,6 +154,7 @@ $( '#archivo' )
   } );
   </script>
 </article>
+<div class="top">↑</div>
 </section>
 
 <footer>
