@@ -119,7 +119,35 @@ a partir de una imagen de simbolos o caracteres que pertenecen a un determinado 
 <div class="tres"><h4>Front end</h4>
 <ul><li>Sirve la página web en la que estás navegando ahora mismo</li></ul></div>
 <div class="tres"><h4>Back end - Maestro RPC</h4></div>
+<ul>
+	<li>Contiene al mismo tiempo un servidor HTTP y un servidor RPC</li>
+	<li>Completamente programado en Go</li>
+	<li>Protocolo HTTP -> usuarios ; RPC -> nodos</li>
+	</br>
+	<li>Métodos que exporta servidor HTTP</li>
+	<ul>
+		<li>Subir. Admite una imagen por HTTP POST. Responde con un id de trabajo asociado al cliente</li>
+		<li>Estado: Admite un id de trabajo del cliente, devuelve el caracter resultante</li>
+	</ul>
+	</br>
+	<li>Métodos que exporta servidor RPC</li>
+	<ul>
+		<li>AceptaConexiones: abre una conex. con el nodo y guarda info acerca de el en lista enlazada</li>
+		<li>CierraConexiones: Recibe un id de nodo y elimina al nodo de la lista enlazada. Tambien cierra la conex.</li>
+		<li>RecibeRespuesta: Admite un byte con el caracter del resultado. Actualia el nodo en la lista</li>
+	</ul>
+</ul>
 <div class="tres"><h4>Esclavo RPC</h4></div>
+<ul>
+	<li>Encargado de conectarse al maestro para proporcionar servicio OCR</li>
+	<li>Completamente programado en Go.</li>
+	</br>
+	<li>Métodos RPC que exporta</li>
+		<ul>
+			<li>RecibeImagen: Recibe un tipo imagen, exporta esta a un fichero y llama scrip Python para reconocer el caracter. Cuando termina hace un <b>callback</b> y llama a RecibeRespuesta</li>
+		</ul>
+</ul>
+
 </article>
 <div class="top">↑</div>
 <div class="next">→</div>
