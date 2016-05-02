@@ -72,49 +72,58 @@ a partir de una imagen de simbolos o caracteres que pertenecen a un determinado 
 
 <section id="go">
 <article>
-<p>Go es un lenguaje de programación inspirado en la sintaxis de C. 
-Nacio en 2009 creado por Google, algunos de sus creadores son los padres de Unix, UTF-9 y V8-Javascript Engine.
-Caracteristicas:</p>
+<p>Go es un lenguaje de programación inspirado en la sintaxis de C.</p> 
+<p> Creado por Google, 2009. Algunos de sus creadores son los <b>padres de Unix</b>, <b>UTF-9</b> y <b>V8-Javascript Engine</b>.</p>
+<p>Caracteristicas:</p>
 <ul>
 	<li>Compilado</li>
 	<li>Estaticamente tipado</li>
 	<li>Concurrente</li>
 	<li>Uso atípico de Programacion O. O. - Go no usa clases, no usa herencia y el uso de interfaces se realiza de manera implicita.</li>
-	<li>Todo esto pensado para mejorar el rendimiento al momento de diseñar el software.</li>
+	
 </ul>
-<p>Go está basado en paquetes, realizados por una amplia comunidad de desarrolladores de todo el mundo.
-Para este proyecto hemos utiliado el paquete RPC2 de golang, desarrollado por cenk.
-Este paquete es un fork de la paquete de golang net/rpc, pero el cual añade comunicación bidireccional, esto
-significa que el servidor puede llamar a los metodos del cliente.</p>
+<p>Go está basado en paquetes, realizados la mayor parte por la comunidad.</p>
+<p>Para este proyecto...</p>
+<p>Paquete rpc2, creado por cenk. Principal objetivo: Comunicación bidireccional</p>
+
 </article>
 <div class="top">↑</div>
 <div class="next">→</div>
 </section>
 <section id="ocr">
 <article>
-<p>
-Cada nodo ejecuta un script en Python para el reconocimiento de los caracteres.
-Este programa toma una imagen en 28x28 en escala de grises, la salida de este es el carácter que ha obtenido.
+<h3>Para el reconocimiento de caracteres </h3>
+<p>Script de Python</p>
+<ul>
+<li>Utiliza libreria TensorFlow</li>
+	<ul>
+	<li>Creada por Google</li>
+	<li>Basado en redes neuronales</li>
+	<li>Libreria OpenSource para aprendizaje de máquinas</li>
+	</ul>
+<li>Recibe imagen en 28x28 en escala de grises</li>
+<li>Salida de este script: Caracter resultante de la conversión</li>
+</ul>
 
-El reconocimiento de caracteres está basado en un conjunto de redes neuronales y convolucionales. Tras seguir
-por estas capas, se somete a la imagen a una regresión logistica para determinar el caracter del que se trata.
 
-El script te Python trabaja con TensorFlow, creado por Google. Es una librería de código libre para el aprendizaje
-de máquinas.
-</p>
 </article>
 <div class="top">↑</div>
 <div class="next">→</div>
 </section>
+
 <section id="estructura">
 <article>
 <div class="tres"></div>
 <div class="tres"></div>
 <div class="tres"></div>
+
+
+
 </article>
 <div class="top">↑</div>
 <div class="next">→</div>
 </section>
+
 <section id="herramientas">
 <article>
 <div class="cinco"><h4><a href="https://github.com/visualfc/liteide">Liteide</a></h4><img src="img/liteide.png"></div>
