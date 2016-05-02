@@ -11,6 +11,11 @@ body{
 	padding-top: 2em;
 }
 h1{text-align: center;}
+a{
+	color: white;
+	text-decoration: none;
+	font-weight: bolder;
+}
 header>h1{
 	color: white;
 }
