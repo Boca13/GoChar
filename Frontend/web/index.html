@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="estilo.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<link rel="stylesheet" href="fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+	<script type="text/javascript" src="fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 	<script src="parallax.js/parallax.min.js"></script>
 	<script>
 	function scroll(e){
@@ -12,6 +14,9 @@
     	}, 500);
 		return false;
 	}
+	$(document).ready(function() {
+		$(".fancybox").fancybox();
+	});
 	$(window).ready(function(){
 		$("#anav").click(function(){return scroll('#top');});
 		$("#aintro").click(function(){return scroll('#intro');});
@@ -51,43 +56,46 @@
 <header>
 <h1>goChar</h1>
 </header>
-<section id="intro">
+<section id="intro" data-parallax="scroll" data-image-src="img/gears.png">
 <h2>GoChar</h2>
-<article data-parallax="scroll" data-image-src="img/gears.png">
+<article>
 <p>GoChar es un proyecto de código libre basado en el reconocimiento de caracteres óptico distribuido, mediante el
 uso de las llamadas a procedimientos remotos(RPC). Está creado a partir del lenguaje de programación Go, Python y la librería open-source TensorFlow.</p>
 
 <p>El reconocimiento de caracteres óptico es un proceso dirigido a la digitaliación de textos, los cuales se identifican
 a partir de una imagen de simbolos o caracteres que pertenecen a un determinado alfabeto.</p>
 
-<p>Muchos lientes desde distintas plataformas pueden acceder a este sistema y subir una imagen para digitalizar una imagen.</p>
+<p>Muchos clientes desde distintas plataformas pueden acceder a este sistema y subir una imagen para digitalizar una imagen.</p>
 <!--<div style="float: right; height: 80%; width: 50%; padding: 1em; text-align: center; vertical-align: middle; background: rgba(200,200,200,0.6);">
 <img src="img/text.png" style="border: 4px groove grey; max-width:40%; height: auto; max-height: 100%; display: inline-block;">→<img src="img/txt.png" style="max-width:40%; height: auto; max-height: 100%; display: inline-block;">
 </div>-->
 
-
-</article>
 <div class="top">↑</div>
 <div class="next">→</div>
+</article>
+
 </section>
 
 <section id="go">
 <h2>Go</h2>
 <article>
+<a class="fancybox foto derecha" rel="group" href="img/2/captura_codigoGo.png"><img src="img/2/captura_codigoGo.png"></a>
+<a class="fancybox foto derecha" rel="group" href="img/2/captura_helloWorldGo.png"><img src="img/2/captura_helloWorldGo.png"></a>
 <p>Go es un lenguaje de programación inspirado en la sintaxis de C.</p> 
-<p> Creado por Google, 2009. Algunos de sus creadores son los <b>padres de Unix</b>, <b>UTF-9</b> y <b>V8-Javascript Engine</b>.</p>
+<p>Creado por Google, 2009. Algunos de sus creadores son los <b>padres de Unix</b>, <b>UTF-8</b> y <b>V8-Javascript Engine</b>.</p>
 <p>Caracteristicas:</p>
 <ul>
 	<li>Compilado</li>
 	<li>Estaticamente tipado</li>
 	<li>Concurrente</li>
-	<li>Uso atípico de Programacion O. O. - Go no usa clases, no usa herencia y el uso de interfaces se realiza de manera implicita.</li>
+	<li>Uso atípico de Programación O. O. - Go no usa clases, no usa herencia y el uso de interfaces se realiza de manera implícita.</li>
 	
 </ul>
 <p>Go está basado en paquetes, realizados la mayor parte por la comunidad.</p>
 <p>Para este proyecto...</p>
 <p>Paquete rpc2, creado por cenk. Principal objetivo: Comunicación bidireccional</p>
-
+<a class="fancybox foto borde" rel="group" href="img/2/appenginegophercolor.jpg"><img src="img/2/appenginegophercolor.jpg"></a>
+<a class="fancybox foto borde" rel="group" href="img/2/companies.png"><img src="img/2/companies.png"></a>
 </article>
 <div class="top">↑</div>
 <div class="next">→</div>
@@ -95,19 +103,20 @@ a partir de una imagen de simbolos o caracteres que pertenecen a un determinado 
 <section id="ocr">
 <h2>Reconocimiento de caracteres (OCR)</h2>
 <article>
+<a class="fancybox foto derecha borde" style="clear: none" rel="group" href="img/3/tensors_flowing.gif"><img src="img/3/tensors_flowing.gif"></a>
+<a class="fancybox foto derecha borde" style="clear: none" rel="group" href="img/3/python.png"><img src="img/3/python.png"></a>
 <h3>Script en Python</h3>
 <ul>
 <li>Utiliza librería TensorFlow</li>
 	<ul>
 	<li>Creada por Google</li>
 	<li>Basada en redes neuronales</li>
-	<li>Libreríaa OpenSource para machine learning</li>
+	<li>Librería OpenSource para machine learning</li>
 	</ul>
 <li>Recibe imagen en 28x28 en escala de grises</li>
 <li>Salida de este script: Caracter resultante de la conversión</li>
 </ul>
-
-
+<a class="fancybox foto borde" rel="group" href="img/3/tensor-flow.png"><img src="img/3/tensor-flow.png"></a>
 </article>
 <div class="top">↑</div>
 <div class="next">→</div>
@@ -117,8 +126,8 @@ a partir de una imagen de simbolos o caracteres que pertenecen a un determinado 
 <h2>Estructura del proyecto</h2>
 <article>
 <div class="tres"><h4>Front end</h4>
-<ul><li>Sirve la página web en la que estás navegando ahora mismo</li></ul></div>
-<div class="tres"><h4>Back end - Maestro RPC</h4></div>
+<ul><li>Sirve la página web en la que estás navegando ahora mismo</li></ul><a class="fancybox foto" rel="group" href="img/NetworkDiagram.png"><img src="img/NetworkDiagram.png"></a></div>
+<div class="tres"><h4>Back end - Maestro RPC</h4>
 <ul>
 	<li>Contiene al mismo tiempo un servidor HTTP y un servidor RPC</li>
 	<li>Completamente programado en Go</li>
@@ -137,7 +146,8 @@ a partir de una imagen de simbolos o caracteres que pertenecen a un determinado 
 		<li>RecibeRespuesta: Admite un byte con el caracter del resultado. Actualia el nodo en la lista</li>
 	</ul>
 </ul>
-<div class="tres"><h4>Esclavo RPC</h4></div>
+</div>
+<div class="tres"><h4>Esclavo RPC</h4>
 <ul>
 	<li>Encargado de conectarse al maestro para proporcionar servicio OCR</li>
 	<li>Completamente programado en Go.</li>
@@ -147,7 +157,8 @@ a partir de una imagen de simbolos o caracteres que pertenecen a un determinado 
 			<li>RecibeImagen: Recibe un tipo imagen, exporta esta a un fichero y llama scrip Python para reconocer el caracter. Cuando termina hace un <b>callback</b> y llama a RecibeRespuesta</li>
 		</ul>
 </ul>
-
+<a class="fancybox foto" rel="group" href="img/4/nube.png"><img src="img/4/nube.png"></a>
+</div>
 </article>
 <div class="top">↑</div>
 <div class="next">→</div>

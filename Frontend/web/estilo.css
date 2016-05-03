@@ -9,6 +9,7 @@ body{
 	background-size: cover;
 	margin: 0;
 	padding-top: 2em;
+	font-size: larger;
 }
 h1{text-align: center;}
 a{
@@ -25,6 +26,7 @@ nav{
 	height: 2em;
 	width: 100%;
 	top: 0;
+	z-index: 100;
 }
 nav>ul{
 	margin: 0;
@@ -40,7 +42,6 @@ article{
 	width: 100%;
 	/*height: 50vh;*/
 	min-height: 200px;
-	max-height: 600px;
 	padding: 2em 2em 1em;
 }
 section{
@@ -126,6 +127,7 @@ footer{
 .top{
 	float: right;
 	text-shadow: 0px 0px 5px rgba(0,200,250,0.95);
+	clear: both;
 }
 .next{
 	float: right;
@@ -135,6 +137,16 @@ footer{
 }
 #herramientas>article{
 	text-align: center;
+}
+.tres {
+	min-width: 200px;
+	width: 32%;
+	display: inline-block;
+	vertical-align: top;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 100%;
+	height: 67vh;
 }
 .cinco {
 	min-width: 100px;
@@ -153,9 +165,12 @@ footer{
 	max-height: 100%;
 	position: relative;
 }
-
-#ocr>article {
-	background: rgba(0,125,200,0.5);
+#intro{
+	border-top: 2px groove navy;
+}
+#intro>article {
+	height: 100%;
+	width: 50%;
 }
 #go>article {
 	background: rgba(10, 100, 100, 0.6);
@@ -163,13 +178,27 @@ footer{
 #ocr>article {
 	background: rgba(0,125,200,0.5);
 }
-#ocr>article {
-	background: rgba(0,125,200,0.5);
+#estructura>article {
+	background: rgba(70,100,200,0.5);
 }
 #ocr>article {
 	background: rgba(0,125,200,0.5);
 }
-
+.foto{
+	margin: 2em;
+}
+.foto>img{
+	width: 200px;
+	height: auto;
+	display: inline-block;
+}
+.derecha{
+	float: right;
+	clear: both;
+}
+.borde>img{
+	border: 2px solid navy;
+}
 /* ANIMACIONES */
 @keyframes agrandar {
     0% {zoom: 100%;}
